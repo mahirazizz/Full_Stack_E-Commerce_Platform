@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { checkAuth } from "./store/auth-slice";
 import CheckAuth from "./components/common/CheckAuth";
-import AuthLogin from "./pages/auth/Login";
+import AuthLogin from "./pages/auth/Temp";
 import AuthRegister from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword"; 
 import ResetPassword from "./pages/auth/ResetPassword";
