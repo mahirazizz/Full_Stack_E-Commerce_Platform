@@ -28,8 +28,9 @@ import PageLoader from "./components/common/PageLoader";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
-    (state) => state.auth
+    (state) => state.auth,
   );
+
   const dispatch = useDispatch();
 
   useEffect(() => {

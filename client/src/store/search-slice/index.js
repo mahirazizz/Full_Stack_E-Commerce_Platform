@@ -10,11 +10,11 @@ export const getSearchResults = createAsyncThunk(
   "/order/getSearchResults",
   async (keyword) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/search/${keyword}`
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/search/${keyword}`,
     );
 
     return response.data;
-  }
+  },
 );
 
 const searchSlice = createSlice({

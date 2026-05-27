@@ -10,42 +10,42 @@ export const addNewAddress = createAsyncThunk(
   "/addresses/addNewAddress",
   async (formData) => {
     const response = await axios.post(
-      "http://localhost:5000/api/shop/address/add",
-      formData
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/address/add`,
+      formData,
     );
     return response.data;
-  }
+  },
 );
 
 export const fetchAllAddress = createAsyncThunk(
   "/addresses/fetchAllAddress",
-  async ( userId ) => {
+  async (userId) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/address/get/${userId}`
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/address/get/${userId}`,
     );
     return response.data;
-  }
+  },
 );
 
 export const editAddress = createAsyncThunk(
   "/addresses/editAddress",
   async ({ userId, addressId, formData }) => {
     const response = await axios.put(
-      `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
-      formData
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/address/update/${userId}/${addressId}`,
+      formData,
     );
     return response.data;
-  }
+  },
 );
 
 export const deleteAddress = createAsyncThunk(
   "/addresses/deleteAddress",
   async ({ userId, addressId }) => {
     const response = await axios.delete(
-      `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/address/delete/${userId}/${addressId}`,
     );
     return response.data;
-  }
+  },
 );
 
 const shopAddressSlice = createSlice({

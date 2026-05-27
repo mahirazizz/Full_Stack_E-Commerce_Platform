@@ -25,10 +25,12 @@ mongoose.set("bufferCommands", false);
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGODB_URL = process.env.MONGODB_URL;
+const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5173";
+const allowedOrigins = CORS_ORIGIN.split(",").map((origin) => origin.trim());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     allowedHeaders: [
       "Content-Type",

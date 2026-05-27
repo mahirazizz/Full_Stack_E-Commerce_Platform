@@ -12,19 +12,19 @@ export const registerUser = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/register`,
         formData,
         {
           withCredentials: true,
-        }
+        },
       );
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error?.response?.data?.message || "Registration failed"
+        error?.response?.data?.message || "Registration failed",
       );
     }
-  }
+  },
 );
 
 export const loginUser = createAsyncThunk(
@@ -32,35 +32,35 @@ export const loginUser = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/login`,
         formData,
         {
           withCredentials: true,
-        }
+        },
       );
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error?.response?.data?.message || "Login failed"
+        error?.response?.data?.message || "Login failed",
       );
     }
-  }
+  },
 );
 
 export const logoutUser = createAsyncThunk("/auth/logout", async () => {
   const response = await axios.post(
-    "http://localhost:5000/api/auth/logout",
+    `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/logout`,
     {},
     {
       withCredentials: true,
-    }
+    },
   );
   return response.data;
 });
 
 export const checkAuth = createAsyncThunk("/auth/checkauth", async () => {
   const response = await axios.get(
-    "http://localhost:5000/api/auth/check-auth",
+    `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/check-auth`,
     {
       withCredentials: true,
       headers: {
@@ -68,7 +68,7 @@ export const checkAuth = createAsyncThunk("/auth/checkauth", async () => {
           "no-store, no-cache, must-revalidate, proxy-revalidate",
         Expires: "0",
       },
-    }
+    },
   );
   return response.data;
 });

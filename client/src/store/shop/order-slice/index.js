@@ -15,7 +15,7 @@ export const getPayPalConfig = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/shop/order/paypal-config"
+        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/order/paypal-config`,
       );
       return response.data;
     } catch (error) {
@@ -23,10 +23,10 @@ export const getPayPalConfig = createAsyncThunk(
         error?.response?.data || {
           success: false,
           message: "Unable to load PayPal configuration.",
-        }
+        },
       );
     }
-  }
+  },
 );
 
 export const createNewOrder = createAsyncThunk(
@@ -34,8 +34,8 @@ export const createNewOrder = createAsyncThunk(
   async (orderData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/shop/order/create",
-        orderData
+        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/order/create`,
+        orderData,
       );
       return response.data;
     } catch (error) {
@@ -43,24 +43,27 @@ export const createNewOrder = createAsyncThunk(
         error?.response?.data || {
           success: false,
           message: "Unable to create order. Please try again.",
-        }
+        },
       );
     }
-  }
+  },
 );
 
 export const capturePayment = createAsyncThunk(
   "/order/capturePayment",
-  async ({ paymentId, payerId, orderId, paypalOrderId }, { rejectWithValue }) => {
+  async (
+    { paymentId, payerId, orderId, paypalOrderId },
+    { rejectWithValue },
+  ) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/shop/order/capture",
+        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/order/capture`,
         {
           paymentId,
           payerId,
           orderId,
           paypalOrderId,
-        }
+        },
       );
       return response.data;
     } catch (error) {
@@ -68,30 +71,30 @@ export const capturePayment = createAsyncThunk(
         error?.response?.data || {
           success: false,
           message: "Unable to capture payment. Please try again.",
-        }
+        },
       );
     }
-  }
+  },
 );
 
 export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUserId",
   async (userId) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/order/list/${userId}`
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/order/list/${userId}`,
     );
     return response.data;
-  }
+  },
 );
 
 export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/order/details/${id}`
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/order/details/${id}`,
     );
     return response.data;
-  }
+  },
 );
 
 const shoppingOrderSlice = createSlice({
@@ -113,7 +116,7 @@ const shoppingOrderSlice = createSlice({
         state.orderId = action.payload.orderId;
         sessionStorage.setItem(
           "currentOrderId",
-          JSON.stringify(action.payload.orderId)
+          JSON.stringify(action.payload.orderId),
         );
       })
       .addCase(createNewOrder.rejected, (state, action) => {

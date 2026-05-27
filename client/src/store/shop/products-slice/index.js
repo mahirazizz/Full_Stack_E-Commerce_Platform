@@ -18,10 +18,10 @@ export const fetchAllFilteredProducts = createAsyncThunk(
     });
 
     const response = await axios.get(
-      `http://localhost:5000/api/shop/products/get?${query}`
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/products/get?${query}`,
     );
     return response.data;
-  }
+  },
 );
 
 export const fetchProductDetails = createAsyncThunk(
@@ -29,10 +29,10 @@ export const fetchProductDetails = createAsyncThunk(
   async (productId) => {
     // console.log("fetchProductDetails", fetchProductDetails);
     const result = await axios.get(
-      `http://localhost:5000/api/shop/products/get/${productId}`
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/products/get/${productId}`,
     );
     return result?.data;
-  }
+  },
 );
 
 const shoppingProductSlice = createSlice({

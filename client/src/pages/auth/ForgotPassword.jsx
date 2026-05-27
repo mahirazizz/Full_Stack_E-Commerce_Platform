@@ -23,7 +23,7 @@ function ForgotPassword() {
     }
 
     axios
-      .post("http://localhost:5000/api/auth/forgot-password", { email })
+      .post(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/forgot-password`, { email })
       .then((response) => {
         toast({
           title: response?.data?.message || "Reset link generated",

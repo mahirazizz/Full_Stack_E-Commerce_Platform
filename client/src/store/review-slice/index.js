@@ -10,21 +10,21 @@ export const addReview = createAsyncThunk(
   "/order/addReview",
   async (formdata) => {
     const response = await axios.post(
-      `http://localhost:5000/api/shop/review/add`,
-      formdata
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/review/add`,
+      formdata,
     );
     return response.data;
-  }
+  },
 );
 
 export const getReviews = createAsyncThunk(
   "/order/getReviews",
   async (productId) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/review/${productId}`
+      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/review/${productId}`,
     );
     return response.data;
-  }
+  },
 );
 
 const reviewSlice = createSlice({
