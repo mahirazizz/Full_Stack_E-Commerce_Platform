@@ -5,7 +5,7 @@ import { checkAuth } from "./store/auth-slice";
 import CheckAuth from "./components/common/CheckAuth";
 import AuthLogin from "./pages/auth/Login";
 import AuthRegister from "./pages/auth/Register";
-import ForgotPassword from "./pages/auth/ForgotPassword";
+import ForgotPassword from "./pages/auth/ForgotPassword"; 
 import ResetPassword from "./pages/auth/ResetPassword";
 import AdminDashboard from "./pages/admin-view/Dashboard";
 import AdminProducts from "./pages/admin-view/Products";
