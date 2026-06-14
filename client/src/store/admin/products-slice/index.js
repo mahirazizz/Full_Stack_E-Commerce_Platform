@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_BASE_URL } from "@/lib/apiBaseUrl";
 
 const initialState = {
   isLoading: false,
@@ -10,7 +11,7 @@ export const addNewProduct = createAsyncThunk(
   "/products/addnewproduct",
   async (formData) => {
     const result = await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/admin/products/add`,
+      `${API_BASE_URL}/api/admin/products/add`,
       formData,
       {
         headers: {
@@ -26,7 +27,7 @@ export const fetchAllProducts = createAsyncThunk(
   "/products/fetchAllProducts",
   async () => {
     const result = await axios.get(
-      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/admin/products/fetchProduct`
+      `${API_BASE_URL}/api/admin/products/fetchProduct`
     );
     return result.data;
   }
@@ -36,7 +37,7 @@ export const editProduct = createAsyncThunk(
   "/products/editProduct",
   async ({ formData, id }) => {
     const result = await axios.put(
-      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/admin/products/edit/${id}`,
+      `${API_BASE_URL}/api/admin/products/edit/${id}`,
       formData,
       {
         headers: {
@@ -52,7 +53,7 @@ export const deleteProduct = createAsyncThunk(
   "/products/deleteProduct",
   async (id) => {
     const result = await axios.delete(
-      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/admin/products/delete/${id}`
+      `${API_BASE_URL}/api/admin/products/delete/${id}`
     );
     return result.data;
   }

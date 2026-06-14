@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/useToast";
+import { API_BASE_URL } from "@/lib/apiBaseUrl";
 import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -23,7 +24,7 @@ function ForgotPassword() {
     }
 
     axios
-      .post(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/forgot-password`, { email })
+      .post(`${API_BASE_URL}/api/auth/forgot-password`, { email })
       .then((response) => {
         toast({
           title: response?.data?.message || "Reset link generated",

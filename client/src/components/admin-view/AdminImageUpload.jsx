@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "@/lib/apiBaseUrl";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -121,7 +122,7 @@ function ProductImageUpload({
         data.append("my_file", file);
 
         const response = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/admin/products/upload-image`,
+          `${API_BASE_URL}/api/admin/products/upload-image`,
           data,
         );
 

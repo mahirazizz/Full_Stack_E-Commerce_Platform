@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_BASE_URL } from "@/lib/apiBaseUrl";
 
 const initialState = {
   isAuthenticated: false,
@@ -12,7 +13,7 @@ export const registerUser = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/register`,
+        `${API_BASE_URL}/api/auth/register`,
         formData,
         {
           withCredentials: true,
@@ -32,7 +33,7 @@ export const loginUser = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/login`,
+        `${API_BASE_URL}/api/auth/login`,
         formData,
         {
           withCredentials: true,
@@ -49,7 +50,7 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk("/auth/logout", async () => {
   const response = await axios.post(
-    `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/logout`,
+    `${API_BASE_URL}/api/auth/logout`,
     {},
     {
       withCredentials: true,
@@ -60,7 +61,7 @@ export const logoutUser = createAsyncThunk("/auth/logout", async () => {
 
 export const checkAuth = createAsyncThunk("/auth/checkauth", async () => {
   const response = await axios.get(
-    `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/check-auth`,
+    `${API_BASE_URL}/api/auth/check-auth`,
     {
       withCredentials: true,
       headers: {
