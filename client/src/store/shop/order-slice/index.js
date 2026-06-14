@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_BASE_URL } from "@/lib/apiBaseUrl";
 
 const initialState = {
   approvalURL: null,
@@ -15,7 +16,7 @@ export const getPayPalConfig = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/order/paypal-config`,
+        `${API_BASE_URL}/api/shop/order/paypal-config`,
       );
       return response.data;
     } catch (error) {
@@ -34,7 +35,7 @@ export const createNewOrder = createAsyncThunk(
   async (orderData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/order/create`,
+        `${API_BASE_URL}/api/shop/order/create`,
         orderData,
       );
       return response.data;
@@ -57,7 +58,7 @@ export const capturePayment = createAsyncThunk(
   ) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/order/capture`,
+        `${API_BASE_URL}/api/shop/order/capture`,
         {
           paymentId,
           payerId,
@@ -81,7 +82,7 @@ export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUserId",
   async (userId) => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/order/list/${userId}`,
+      `${API_BASE_URL}/api/shop/order/list/${userId}`,
     );
     return response.data;
   },
@@ -91,7 +92,7 @@ export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/order/details/${id}`,
+      `${API_BASE_URL}/api/shop/order/details/${id}`,
     );
     return response.data;
   },

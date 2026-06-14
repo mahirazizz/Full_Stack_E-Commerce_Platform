@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { API_BASE_URL } from "@/lib/apiBaseUrl";
 
 const initialState = {
   isLoading: false,
@@ -14,7 +15,7 @@ export const addReview = createAsyncThunk(
   ) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/review/add`,
+        `${API_BASE_URL}/api/shop/review/add`,
         {
           productId,
           userId,
@@ -40,7 +41,7 @@ export const getReviews = createAsyncThunk(
   "reviews/getReviews",
   async (productId) => {
     const result = await axios.get(
-      `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/shop/review/${productId}`,
+      `${API_BASE_URL}/api/shop/review/${productId}`,
     );
     return result?.data;
   },
