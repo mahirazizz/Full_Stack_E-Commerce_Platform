@@ -5,12 +5,6 @@ A full-stack e-commerce application with separate customer and admin experiences
 - Customer side: browse products, filter and sort listings, search, manage cart and addresses, place orders, pay with PayPal, and track orders.
 - Admin side: manage products, feature banners, and order statuses.
 
-## Project Status
-
-- Status: actively maintained and in development
-- Core frontend and backend flows are implemented and working locally
-- Forgot-password is currently a reset-link flow; email delivery is not wired yet
-
 ## Tech Stack
 
 ### Frontend (client)
@@ -43,29 +37,29 @@ E-Commerce-Website/
 ## Core Features
 
 - Authentication
-- User registration and login: working
-- Cookie-based auth check middleware: working
-- Forgot-password and reset-password flow: working as a reset-link flow
+- User registration and login
+- Cookie-based auth check middleware
+- Forgot-password and reset-password flow
 
 - Shopping
-- Product listing with category/brand filters and sorting: working
-- Product search by keyword: working
-- Product detail view: working
-- Cart add/update/delete: working
-- Address add/edit/delete: working
-- Product review and rating: working
+- Product listing with category/brand filters and sorting
+- Product search by keyword
+- Product detail view
+- Cart add/update/delete
+- Address add/edit/delete
+- Product review and rating
 
 - Checkout and Orders
-- PayPal order creation and capture: working
-- Order history for user: working
-- Payment success/cancel handling: working
+- PayPal order creation and capture
+- Order history for user
+- Payment success/cancel handling
 
 - Admin Panel
-- Product CRUD: working
-- Product image upload to Cloudinary: working
-- Featured banner/image management: working
-- View all orders: working
-- Update order status: working
+- Product CRUD
+- Product image upload to Cloudinary
+- Featured banner/image management
+- View all orders
+- Update order status
 
 ## High-Level Flow
 
@@ -181,7 +175,7 @@ Use this project summary:
 ## Current Notes / Limitations
 
 - Client currently uses hardcoded API base URLs.
-- Forgot-password flow generates a reset URL in the API response; email delivery is not configured yet.
+- Forgot-password flow generates reset URL in API response; email delivery is not configured yet.
 - No automated tests are configured yet.
 
 ## Author
