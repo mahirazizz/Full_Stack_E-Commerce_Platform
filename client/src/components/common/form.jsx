@@ -1,6 +1,6 @@
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../ui/textarea.jsx";
 import { Button } from "../ui/button";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";

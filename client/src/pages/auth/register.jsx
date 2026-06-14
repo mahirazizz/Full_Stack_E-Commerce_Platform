@@ -1,4 +1,4 @@
-import CommonForm from "@/components/common/Form";
+import CommonForm from "@/components/common/Form.jsx";
 import { registerFormControls } from "@/config";
 import { useToast } from "@/hooks/useToast";
 import { registerUser } from "@/store/auth-slice";

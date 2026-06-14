@@ -1,6 +1,6 @@
 import ProductImageUpload from "@/components/admin-view/AdminImageUpload";
 import AdminProductTile from "@/components/admin-view/AdminProductTile";
-import CommonForm from "@/components/common/Form";
+import CommonForm from "@/components/common/Form.jsx";
 import { addProductFormElements, brandsByCategory } from "@/config";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
