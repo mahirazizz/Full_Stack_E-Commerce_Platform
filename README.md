@@ -5,6 +5,10 @@ A full-stack e-commerce application with separate customer and admin experiences
 - Customer side: browse products, filter and sort listings, search, manage cart and addresses, place orders, pay with PayPal, and track orders.
 - Admin side: manage products, feature banners, and order statuses.
 
+## Live Frontend
+
+https://full-stack-e-commerce-platform-bz8i.vercel.app/
+
 ## Tech Stack
 
 ### Frontend (client)
@@ -99,7 +103,8 @@ Create `server/.env` and add:
 PORT=5000
 MONGODB_URL=your_mongodb_connection_string
 ACCESS_TOKEN_SECRET=your_jwt_secret
-CLIENT_BASE_URL=http://localhost:5173
+CLIENT_BASE_URL=https://full-stack-e-commerce-platform-bz8i.vercel.app/
+CORS_ORIGIN=https://full-stack-e-commerce-platform-bz8i.vercel.app/
 
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
@@ -114,8 +119,8 @@ PAYPAL_RETRY_COUNT=1
 ```
 
 Notes:
-- Frontend API URLs are currently hardcoded to `http://localhost:5000` in Redux slices/components.
-- If you deploy, update those URLs or move them to frontend environment variables.
+- Frontend API URLs are controlled by `VITE_API_BASE_URL` in the client. Set it to your deployed backend URL in production.
+- The forgot-password reset link uses `CLIENT_BASE_URL`, so keep it pointed at the live frontend URL in production.
 
 ## Installation and Local Setup
 
