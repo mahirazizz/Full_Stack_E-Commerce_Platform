@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import { checkAuth } from "./store/auth-slice";
 import CheckAuth from "./components/common/CheckAuth";
 import AuthLogin from "./pages/auth/Login";
-import AuthRegister from "./pages/auth/Register";
+import AuthRegister from "./pages/auth/register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import AdminDashboard from "./pages/admin-view/Dashboard";
