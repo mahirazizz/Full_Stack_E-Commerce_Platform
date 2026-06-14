@@ -12,7 +12,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 function SearchProducts() {
   const [keyword, setKeyword] = useState("");
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { searchResults } = useSelector((state) => state.shopSearch);

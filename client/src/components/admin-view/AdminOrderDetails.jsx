@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CommonForm from "../common/Form";
+import CommonForm from "../common/form.jsx";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";

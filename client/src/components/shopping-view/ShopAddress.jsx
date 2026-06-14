@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import CommonForm from "../common/Form";
+import CommonForm from "../common/form.jsx";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { addressFormControls } from "@/config";
 import { useDispatch, useSelector } from "react-redux";
@@ -127,7 +127,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
 
   useEffect(() => {
     dispatch(fetchAllAddress(user?.id));
-  }, [dispatch]);
+  }, [dispatch, user?.id]);
 
   return (
     <Card className="gap-0 overflow-hidden rounded-3xl border-slate-200 bg-white py-0 shadow-[0_14px_32px_rgba(15,23,42,0.07)]">

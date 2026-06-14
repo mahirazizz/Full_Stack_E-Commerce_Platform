@@ -27,7 +27,7 @@ import { Label } from "../ui/label";
 function MenuItems() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   function handleNavigate(getCurrentMenuItem) {
     sessionStorage.removeItem("filters");

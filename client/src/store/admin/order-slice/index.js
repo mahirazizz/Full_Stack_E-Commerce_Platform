@@ -48,25 +48,25 @@ const adminOrderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getAllOrdersForAdmin.pending, (state, action) => {
+      .addCase(getAllOrdersForAdmin.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getAllOrdersForAdmin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.orderList = action.payload.data;
       })
-      .addCase(getAllOrdersForAdmin.rejected, (state, action) => {
+      .addCase(getAllOrdersForAdmin.rejected, (state) => {
         state.isLoading = false;
         state.orderList = [];
       })
-      .addCase(getOrderDetailsForAdmin.pending, (state, action) => {
+      .addCase(getOrderDetailsForAdmin.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getOrderDetailsForAdmin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.orderList = action.payload.data;
       })
-      .addCase(getOrderDetailsForAdmin.rejected, (state, action) => {
+      .addCase(getOrderDetailsForAdmin.rejected, (state) => {
         state.isLoading = false;
         state.orderList = [];
       });
