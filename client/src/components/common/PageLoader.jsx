@@ -13,16 +13,26 @@ function PageLoader() {
         </p>
         <div className="mt-8 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl bg-slate-950 px-4 py-3 text-left text-white">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-white/55">Secure</p>
+            <p className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+              Secure
+            </p>
             <p className="mt-2 text-sm font-semibold">Verifying login state</p>
           </div>
           <div className="rounded-2xl bg-slate-100 px-4 py-3 text-left text-slate-950">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-slate-400">Fast</p>
-            <p className="mt-2 text-sm font-semibold">Preparing your dashboard</p>
+            <p className="text-[11px] uppercase tracking-[0.22em] text-slate-400">
+              Fast
+            </p>
+            <p className="mt-2 text-sm font-semibold">
+              Preparing your dashboard
+            </p>
           </div>
           <div className="rounded-2xl bg-amber-50 px-4 py-3 text-left text-slate-950">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-amber-700">Ready</p>
-            <p className="mt-2 text-sm font-semibold">Syncing cart and orders</p>
+            <p className="text-[11px] uppercase tracking-[0.22em] text-amber-700">
+              Ready
+            </p>
+            <p className="mt-2 text-sm font-semibold">
+              Syncing cart and orders
+            </p>
           </div>
         </div>
       </div>
