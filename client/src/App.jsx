@@ -20,7 +20,7 @@ import PaypalReturnPage from "./pages/shopping-view/PaypalReturn";
 import PaypalCancelPage from "./pages/shopping-view/PaypalCancel";
 import PaymentSuccessPage from "./pages/shopping-view/PaymentSuccess";
 import SearchProducts from "./pages/shopping-view/Search";
-import UnauthPage from "./pages/unauth-page/Index";
+import UnauthPage from "./pages/unauth-page/index";
 import AuthLayout from "./components/auth/layout";
 import AdminLayout from "./components/admin-view/AdminLayout";
 import PageNotFound from "./pages/page-not-found/PageNotFound";
