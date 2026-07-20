@@ -56,12 +56,18 @@ function AuthLogin() {
         isBtnDisabled={isLoading}
       />
       <div className="flex items-center justify-between gap-4 text-sm">
-        <Link className="font-medium text-slate-700 transition hover:text-slate-950" to="/auth/forgot-password">
+        <Link
+          className="font-medium text-slate-700 transition hover:text-slate-950"
+          to="/auth/forgot-password"
+        >
           Forgot password?
         </Link>
         <p className="text-slate-600">
           New here?
-          <Link className="ml-2 font-semibold text-slate-950 underline-offset-4 hover:underline" to="/auth/register">
+          <Link
+            className="ml-2 font-semibold text-slate-950 underline-offset-4 hover:underline"
+            to="/auth/register"
+          >
             Create account
           </Link>
         </p>

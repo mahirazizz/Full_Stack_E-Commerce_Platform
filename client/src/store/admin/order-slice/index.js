@@ -10,21 +10,20 @@ const initialState = {
 export const getAllOrdersForAdmin = createAsyncThunk(
   "/order/getAllOrdersForAllUsers",
   async () => {
-    const response = await axios.get(
-      `${API_BASE_URL}/api/admin/orders/get`
-    );
+    const response = await axios.get(`${API_BASE_URL}/api/admin/orders/get`);
     return response.data;
-  }
+  },
 );
 
 export const getOrderDetailsForAdmin = createAsyncThunk(
   "/order/getOrderDetailsForAdmin",
   async (id) => {
     const response = await axios.get(
-      `${API_BASE_URL}/api/admin/orders/details/${id}`
+      `${API_BASE_URL}/api/admin/orders/details/${id}`,
     );
+    // console.log("response.data", response.data);
     return response.data;
-  }
+  },
 );
 
 export const updateOrderStatus = createAsyncThunk(
@@ -32,10 +31,10 @@ export const updateOrderStatus = createAsyncThunk(
   async (id, orderStatus) => {
     const response = await axios.put(
       `${API_BASE_URL}/api/admin/orders/update/${id}`,
-      orderStatus
+      orderStatus,
     );
     return response.data;
-  }
+  },
 );
 
 const adminOrderSlice = createSlice({

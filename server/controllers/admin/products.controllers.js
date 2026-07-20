@@ -109,8 +109,8 @@ const editProduct = async (req, res) => {
     findProduct.images = Array.isArray(images)
       ? images
       : image
-      ? [image]
-      : findProduct.images || [];
+        ? [image]
+        : findProduct.images || [];
     findProduct.image = image || findProduct.images?.[0] || findProduct.image;
 
     await findProduct.save();
