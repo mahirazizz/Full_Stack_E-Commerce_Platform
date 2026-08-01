@@ -15,7 +15,7 @@ const ProductSchema = new mongoose.Schema(
     salePrice: Number,
     totalStock: Number,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Product = mongoose.model("Product", ProductSchema);

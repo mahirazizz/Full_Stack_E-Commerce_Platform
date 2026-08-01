@@ -4,7 +4,7 @@ const FeatureSchema = new mongoose.Schema(
   {
     image: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Feature = mongoose.model("Feature", FeatureSchema);

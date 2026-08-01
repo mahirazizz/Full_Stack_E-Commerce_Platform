@@ -37,7 +37,7 @@ function ShoppingCheckout() {
               ? currentItem?.salePrice
               : currentItem?.price) *
               currentItem?.quantity,
-          0
+          0,
         )
       : 0;
 
@@ -45,7 +45,10 @@ function ShoppingCheckout() {
     dispatch(getPayPalConfig());
   }, [dispatch]);
 
-  const getOrderData = (paymentMethod = "paypal", checkoutType = "smart-buttons") => ({
+  const getOrderData = (
+    paymentMethod = "paypal",
+    checkoutType = "smart-buttons",
+  ) => ({
     userId: user?.id || user?._id,
     cartId: cartItems?._id,
     cartItems: cartItemList.map((singleCartItem) => ({
@@ -127,7 +130,7 @@ function ShoppingCheckout() {
 
     setIsSmartButtonBusy(true);
     const action = await dispatch(
-      createNewOrder(getOrderData(paymentMethod, "smart-buttons"))
+      createNewOrder(getOrderData(paymentMethod, "smart-buttons")),
     );
     setIsSmartButtonBusy(false);
 
@@ -158,7 +161,7 @@ function ShoppingCheckout() {
       capturePayment({
         orderId,
         paypalOrderId: data.orderID,
-      })
+      }),
     );
 
     if (action?.payload?.success) {
@@ -254,7 +257,7 @@ function ShoppingCheckout() {
                     forceReRender={[payMode, totalCartAmount]}
                     createOrder={() =>
                       createOrderForSmartButtons(
-                        payMode === "card" ? "card" : "paypal"
+                        payMode === "card" ? "card" : "paypal",
                       )
                     }
                     onApprove={handleOnApprove}

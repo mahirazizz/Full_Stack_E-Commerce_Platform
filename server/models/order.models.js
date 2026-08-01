@@ -30,7 +30,7 @@ const OrderSchema = new mongoose.Schema(
     paymentId: String,
     payerId: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Order = mongoose.model("Order", OrderSchema);

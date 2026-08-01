@@ -14,7 +14,7 @@ const AddressSchema = new mongoose.Schema(
     phone: String,
     notes: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Address = mongoose.model("Address", AddressSchema);

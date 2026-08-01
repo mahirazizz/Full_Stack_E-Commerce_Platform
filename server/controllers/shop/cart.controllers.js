@@ -28,7 +28,7 @@ const addToCart = async (req, res) => {
     }
 
     const findCurrentProductIndex = cart.items.findIndex(
-      (item) => item.productId.toString() === productId
+      (item) => item.productId.toString() === productId,
     );
 
     if (findCurrentProductIndex === -1) {
@@ -74,7 +74,7 @@ const fetchCartItems = async (req, res) => {
     }
 
     const validCartItems = cart.items.filter(
-      (productItem) => productItem.productId
+      (productItem) => productItem.productId,
     );
 
     if (validCartItems.length < cart.items.length) {
@@ -126,7 +126,7 @@ const updateCartItems = async (req, res) => {
       });
     }
     const findCurrentProductIndex = cart.items.findIndex(
-      (item) => item.productId.toString() === productId
+      (item) => item.productId.toString() === productId,
     );
 
     if (findCurrentProductIndex === -1) {
@@ -193,7 +193,7 @@ const deleteCartItems = async (req, res) => {
     }
 
     cart.items = cart.items.filter(
-      (item) => item.productId._id.toString() !== productId
+      (item) => item.productId._id.toString() !== productId,
     );
 
     await cart.save();

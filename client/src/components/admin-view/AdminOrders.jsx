@@ -24,9 +24,9 @@ function AdminOrdersView() {
   const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
   const dispatch = useDispatch();
 
-  console.log("orderList", orderList?.filter((order) => order.orderStatus === "pending"));
+  // console.log("orderList", orderList?.filter((order) => order.orderStatus === "pending"));
   console.log("orderDetails", orderDetails);
-  
+
   const confirmedCount =
     orderList?.filter((order) => order.orderStatus === "confirmed").length || 0;
   const pendingCount =
@@ -35,7 +35,6 @@ function AdminOrdersView() {
   function handleFetchOrderDetails(getId) {
     dispatch(getOrderDetailsForAdmin(getId));
   }
-
 
   useEffect(() => {
     dispatch(getAllOrdersForAdmin());

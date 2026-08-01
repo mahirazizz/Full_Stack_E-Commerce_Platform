@@ -8,7 +8,7 @@ const ReviewSchema = new mongoose.Schema(
     reviewMessage: String,
     reviewValue: Number,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Review = mongoose.model("ProductReview", ReviewSchema);
