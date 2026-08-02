@@ -113,11 +113,14 @@ const createOrder = async (req, res) => {
       })),
     });
 
+    const normalizedAddressInfo = addressInfo || null;
+
     const newlyCreatedOrder = new Order({
       userId,
       cartId,
       cartItems,
-      addressInfo,
+      addressInfo: normalizedAddressInfo,
+      address: normalizedAddressInfo,
       orderStatus,
       paymentMethod,
       paymentStatus,
@@ -293,15 +296,25 @@ const getAllOrdersByUser = async (req, res) => {
     const orders = await Order.find({ userId });
 
     if (!orders.length) {
-      return res.status(404).json({
-        success: false,
-        message: "No orders found!",
+      return res.status(200).json({
+        success: true,
+        data: [],
       });
     }
 
+    const normalizedOrders = orders.map((order) => {
+      const plainOrder = order.toObject();
+
+      if (!plainOrder.addressInfo && plainOrder.address) {
+        plainOrder.addressInfo = plainOrder.address;
+      }
+
+      return plainOrder;
+    });
+
     res.status(200).json({
       success: true,
-      data: orders,
+      data: normalizedOrders,
     });
   } catch (e) {
     console.log(e);
@@ -325,9 +338,15 @@ const getOrderDetails = async (req, res) => {
       });
     }
 
+    const plainOrder = order.toObject();
+
+    if (!plainOrder.addressInfo && plainOrder.address) {
+      plainOrder.addressInfo = plainOrder.address;
+    }
+
     res.status(200).json({
       success: true,
-      data: order,
+      data: plainOrder,
     });
   } catch (e) {
     console.log(e);

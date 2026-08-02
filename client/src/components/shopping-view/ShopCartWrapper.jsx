@@ -20,7 +20,9 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
   return (
     <SheetContent className="border-slate-200 bg-white sm:max-w-md">
       <SheetHeader className="border-b border-slate-100 pb-4">
-        <SheetTitle className="text-xl font-black tracking-tight text-slate-950">Your cart</SheetTitle>
+        <SheetTitle className="text-xl font-black tracking-tight text-slate-950">
+          Your cart
+        </SheetTitle>
       </SheetHeader>
       <div className="mt-6 space-y-4">
         {cartItems && cartItems.length > 0 ? (

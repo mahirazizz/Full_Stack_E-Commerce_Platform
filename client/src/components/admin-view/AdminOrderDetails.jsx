@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CommonForm from "../common/form.jsx";
-import { Dialog, DialogContent } from "../ui/dialog";
+import { DialogContent } from "../ui/dialog";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,8 +41,7 @@ function AdminOrderDetailsView({ orderDetails }) {
   }
 
   return (
-    <Dialog>
-      <DialogContent className="max-h-[90vh] overflow-y-auto border-white/60 bg-white/95 p-0 sm:max-w-[760px]">
+    <DialogContent className="max-h-[90vh] overflow-y-auto border-white/60 bg-white/95 p-0 sm:max-w-[760px]">
         <div className="space-y-6 p-6 sm:p-8">
           <div className="rounded-[1.5rem] bg-slate-950 p-6 text-white shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
@@ -172,7 +171,6 @@ function AdminOrderDetailsView({ orderDetails }) {
           </div>
         </div>
       </DialogContent>
-    </Dialog>
   );
 }
 

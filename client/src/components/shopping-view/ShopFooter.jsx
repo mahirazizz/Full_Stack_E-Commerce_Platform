@@ -37,12 +37,17 @@ function ShopFooter() {
               <span className="text-lg font-black">L</span>
             </div>
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-600">LightBlue Mart</p>
-              <h2 className="text-xl font-black tracking-tight text-slate-950">Premium marketplace experience</h2>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-sky-600">
+                LightBlue Mart
+              </p>
+              <h2 className="text-xl font-black tracking-tight text-slate-950">
+                Premium marketplace experience
+              </h2>
             </div>
           </div>
           <p className="max-w-xl text-sm leading-7 text-slate-600">
-            A refined shopping destination for browsing products, tracking orders, and managing your account with clarity.
+            A refined shopping destination for browsing products, tracking
+            orders, and managing your account with clarity.
           </p>
           <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-4 py-2 text-sm font-medium text-sky-700">
             Secure checkout, faster browsing, cleaner design.

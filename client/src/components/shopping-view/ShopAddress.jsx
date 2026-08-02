@@ -52,7 +52,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
             userId: user?.id,
             addressId: currentEditedId,
             formData,
-          })
+          }),
         ).then((data) => {
           if (data?.payload?.success) {
             dispatch(fetchAllAddress(user?.id));
@@ -67,7 +67,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
           addNewAddress({
             ...formData,
             userId: user?.id,
-          })
+          }),
         ).then((data) => {
           if (data?.payload?.success) {
             dispatch(fetchAllAddress(user?.id));
@@ -81,7 +81,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
 
   function handleDeleteAddress(getCurrentAddress) {
     dispatch(
-      deleteAddress({ userId: user?.id, addressId: getCurrentAddress._id })
+      deleteAddress({ userId: user?.id, addressId: getCurrentAddress._id }),
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchAllAddress(user?.id));
@@ -121,7 +121,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
       "phone",
     ];
     return requiredFields.every(
-      (field) => formData[field] && formData[field].trim() !== ""
+      (field) => formData[field] && formData[field].trim() !== "",
     );
   }
 
@@ -163,7 +163,9 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
             ))
           ) : (
             <div className="flex min-h-[220px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 text-center lg:col-span-2 xl:col-span-3">
-              <p className="text-lg font-semibold text-slate-900">No saved address yet</p>
+              <p className="text-lg font-semibold text-slate-900">
+                No saved address yet
+              </p>
               <p className="mt-1 text-sm text-slate-500">
                 Add your first address below to continue checkout.
               </p>

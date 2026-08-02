@@ -8,7 +8,9 @@ function ProductFilter({ filters, handleFilter }) {
   return (
     <div className="rounded-[1.5rem] border border-slate-200/80 bg-white shadow-[0_12px_36px_rgba(15,23,42,0.06)]">
       <div className="border-b border-slate-100 p-4">
-        <h2 className="text-lg font-black tracking-tight text-slate-950">Filters</h2>
+        <h2 className="text-lg font-black tracking-tight text-slate-950">
+          Filters
+        </h2>
       </div>
       <div className="p-4 space-y-4">
         {Object.keys(filterOptions).map((keyItem) => (

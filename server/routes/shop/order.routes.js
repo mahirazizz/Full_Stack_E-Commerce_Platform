@@ -9,7 +9,6 @@ import {
   getOrderDetails,
 } from "../../controllers/shop/order.controllers.js";
 
-
 router.get("/paypal-config", getPayPalConfig);
 router.post("/create", createOrder);
 router.post("/capture", capturePayment);

@@ -94,6 +94,7 @@ export const getOrderDetails = createAsyncThunk(
     const response = await axios.get(
       `${API_BASE_URL}/api/shop/order/details/${id}`,
     );
+    // console.log(response.data, "this is order details response data");
     return response.data;
   },
 );

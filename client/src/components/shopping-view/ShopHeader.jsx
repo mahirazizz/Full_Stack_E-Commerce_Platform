@@ -44,7 +44,7 @@ function MenuItems() {
 
     location.pathname.includes("listing") && currentFilter !== null
       ? setSearchParams(
-          new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
+          new URLSearchParams(`?category=${getCurrentMenuItem.id}`),
         )
       : navigate(getCurrentMenuItem.path);
   }
@@ -118,7 +118,10 @@ function HeaderRightContent() {
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent side="right" className="w-56 rounded-2xl border-slate-200 p-2 shadow-xl">
+        <DropdownMenuContent
+          side="right"
+          className="w-56 rounded-2xl border-slate-200 p-2 shadow-xl"
+        >
           <DropdownMenuLabel>Logged in as {user?.username}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => navigate("/shop/account")}>
@@ -140,23 +143,37 @@ function ShoppingHeader() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
       <div className="flex h-16 items-center justify-between gap-4 px-4 md:px-6 lg:h-20">
-        <Link to="/shop/home" className="flex items-center gap-3 rounded-2xl px-2 py-1 transition hover:bg-sky-50">
+        <Link
+          to="/shop/home"
+          className="flex items-center gap-3 rounded-2xl px-2 py-1 transition hover:bg-sky-50"
+        >
           <span className="grid h-10 w-10 place-items-center rounded-2xl bg-sky-600 text-white shadow-lg shadow-sky-600/20">
             <HousePlug className="h-5 w-5" />
           </span>
           <div className="leading-tight">
-            <span className="block text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-600">LightBlue Mart</span>
-            <span className="text-sm font-black tracking-tight text-slate-950">Shop smarter</span>
+            <span className="block text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-600">
+              LightBlue Mart
+            </span>
+            <span className="text-sm font-black tracking-tight text-slate-950">
+              Shop smarter
+            </span>
           </div>
         </Link>
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden rounded-full border-slate-200 bg-white text-slate-700">
+            <Button
+              variant="outline"
+              size="icon"
+              className="lg:hidden rounded-full border-slate-200 bg-white text-slate-700"
+            >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle header menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-full max-w-xs border-slate-200 bg-white">
+          <SheetContent
+            side="left"
+            className="w-full max-w-xs border-slate-200 bg-white"
+          >
             <MenuItems />
             <HeaderRightContent />
           </SheetContent>

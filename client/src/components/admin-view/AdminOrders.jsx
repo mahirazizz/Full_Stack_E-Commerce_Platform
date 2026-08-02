@@ -33,7 +33,16 @@ function AdminOrdersView() {
     orderList?.filter((order) => order.orderStatus === "pending").length || 0;
 
   function handleFetchOrderDetails(getId) {
+    setOpenDetailsDialog(true);
     dispatch(getOrderDetailsForAdmin(getId));
+  }
+
+  function handleDialogOpenChange(nextOpen) {
+    setOpenDetailsDialog(nextOpen);
+
+    if (!nextOpen) {
+      dispatch(resetOrderDetails());
+    }
   }
 
   useEffect(() => {
@@ -120,23 +129,12 @@ function AdminOrdersView() {
                       ${orderItem?.totalAmount}
                     </TableCell>
                     <TableCell>
-                      <Dialog
-                        open={openDetailsDialog}
-                        onOpenChange={() => {
-                          setOpenDetailsDialog(false);
-                          dispatch(resetOrderDetails());
-                        }}
+                      <Button
+                        onClick={() => handleFetchOrderDetails(orderItem?._id)}
+                        className="rounded-full bg-slate-950 px-4 text-white hover:bg-slate-800"
                       >
-                        <Button
-                          onClick={() =>
-                            handleFetchOrderDetails(orderItem?._id)
-                          }
-                          className="rounded-full bg-slate-950 px-4 text-white hover:bg-slate-800"
-                        >
-                          View Details
-                        </Button>
-                        <AdminOrderDetailsView orderDetails={orderDetails} />
-                      </Dialog>
+                        View Details
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
@@ -154,6 +152,10 @@ function AdminOrdersView() {
           </Table>
         </div>
       </CardContent>
+
+      <Dialog open={openDetailsDialog} onOpenChange={handleDialogOpenChange}>
+        <AdminOrderDetailsView orderDetails={orderDetails} />
+      </Dialog>
     </Card>
   );
 }
