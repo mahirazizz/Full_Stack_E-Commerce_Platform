@@ -50,6 +50,45 @@ export const createNewOrder = createAsyncThunk(
   },
 );
 
+export const createCodOrder = createAsyncThunk(
+  "/order/createCodOrder",
+  async (orderData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/shop/order/create-cod`,
+        orderData,
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data || {
+          success: false,
+          message: "Unable to place COD order.",
+        },
+      );
+    }
+  },
+);
+
+export const cancelUserOrder = createAsyncThunk(
+  "/order/cancelUserOrder",
+  async (orderId, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/api/shop/order/cancel/${orderId}`,
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data || {
+          success: false,
+          message: "Unable to cancel order.",
+        },
+      );
+    }
+  },
+);
+
 export const capturePayment = createAsyncThunk(
   "/order/capturePayment",
   async (
@@ -94,7 +133,6 @@ export const getOrderDetails = createAsyncThunk(
     const response = await axios.get(
       `${API_BASE_URL}/api/shop/order/details/${id}`,
     );
-    // console.log(response.data, "this is order details response data");
     return response.data;
   },
 );
@@ -114,7 +152,7 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(createNewOrder.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.approvalURL = action.payload.approvalURL || null;
+        state.approvalURL = action.payload.approvalURL;
         state.orderId = action.payload.orderId;
         sessionStorage.setItem(
           "currentOrderId",
@@ -126,11 +164,23 @@ const shoppingOrderSlice = createSlice({
         state.approvalURL = null;
         state.orderId = null;
       })
-      .addCase(getPayPalConfig.fulfilled, (state, action) => {
-        state.paypalClientId = action.payload.clientId || "";
+      .addCase(createCodOrder.pending, (state) => {
+        state.isLoading = true;
       })
-      .addCase(getPayPalConfig.rejected, (state) => {
-        state.paypalClientId = "";
+      .addCase(createCodOrder.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.orderId = action.payload.orderId;
+      })
+      .addCase(createCodOrder.rejected, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(cancelUserOrder.fulfilled, (state, action) => {
+        if (state.orderDetails?._id === action.payload?.data?._id) {
+          state.orderDetails = action.payload.data;
+        }
+        state.orderList = state.orderList.map((order) =>
+          order._id === action.payload?.data?._id ? action.payload.data : order,
+        );
       })
       .addCase(getAllOrdersByUserId.pending, (state) => {
         state.isLoading = true;
@@ -153,8 +203,13 @@ const shoppingOrderSlice = createSlice({
       .addCase(getOrderDetails.rejected, (state) => {
         state.isLoading = false;
         state.orderDetails = null;
+      })
+      .addCase(getPayPalConfig.fulfilled, (state, action) => {
+        state.paypalClientId = action.payload.clientId || "";
       });
   },
 });
+
 export const { resetOrderDetails } = shoppingOrderSlice.actions;
+
 export default shoppingOrderSlice.reducer;

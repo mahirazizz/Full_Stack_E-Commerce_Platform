@@ -1,5 +1,9 @@
 import { Product } from "../../models/product.models.js";
 
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
+
 const searchProducts = async (req, res) => {
   try {
     const { keyword } = req.params;
@@ -10,18 +14,26 @@ const searchProducts = async (req, res) => {
       });
     }
 
-    const regEx = new RegExp(keyword, "i");
+    const trimmed = keyword.trim().slice(0, 50);
+    if (!trimmed) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+      });
+    }
+
+    const safeRegex = new RegExp(escapeRegex(trimmed), "i");
 
     const createSearchQuery = {
       $or: [
-        { title: regEx },
-        { description: regEx },
-        { category: regEx },
-        { brand: regEx },
+        { title: safeRegex },
+        { description: safeRegex },
+        { category: safeRegex },
+        { brand: safeRegex },
       ],
     };
 
-    const searchResults = await Product.find(createSearchQuery);
+    const searchResults = await Product.find(createSearchQuery).limit(50);
 
     res.status(200).json({
       success: true,
@@ -31,7 +43,7 @@ const searchProducts = async (req, res) => {
     console.log(error);
     res.status(500).json({
       success: false,
-      message: "Error",
+      message: "Error occurred while searching products",
     });
   }
 };

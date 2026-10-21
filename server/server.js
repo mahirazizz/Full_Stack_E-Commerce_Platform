@@ -14,6 +14,7 @@ import authRouter from "./routes/auth/auth.routes.js";
 
 import adminProductRouter from "./routes/admin/products.routes.js";
 import adminOrderRouter from "./routes/admin/order.routes.js";
+import adminDashboardRouter from "./routes/admin/dashboard.routes.js";
 
 import shopProductRouter from "./routes/shop/products.routes.js";
 import shopCartRouter from "./routes/shop/cart.routes.js";
@@ -21,6 +22,8 @@ import shopAddressRouter from "./routes/shop/address.routes.js";
 import shopOrderRouter from "./routes/shop/order.routes.js";
 import shopReviewRouter from "./routes/shop/review.routes.js";
 import shopSearchRouter from "./routes/shop/search.routes.js";
+import shopWishlistRouter from "./routes/shop/wishlist.routes.js";
+import shopCouponRouter from "./routes/shop/coupon.routes.js";
 
 import commonFeatureRouter from "./routes/common/feature.routes.js";
 
@@ -54,6 +57,7 @@ app.use("/api/auth", authRouter);
 
 app.use("/api/admin/products", adminProductRouter);
 app.use("/api/admin/orders", adminOrderRouter);
+app.use("/api/admin/dashboard", adminDashboardRouter);
 
 app.use("/api/shop/products", shopProductRouter);
 app.use("/api/shop/cart", shopCartRouter);
@@ -61,6 +65,8 @@ app.use("/api/shop/address", shopAddressRouter);
 app.use("/api/shop/order", shopOrderRouter);
 app.use("/api/shop/review", shopReviewRouter);
 app.use("/api/shop/search", shopSearchRouter);
+app.use("/api/shop/wishlist", shopWishlistRouter);
+app.use("/api/shop/coupon", shopCouponRouter);
 
 app.use("/api/common/feature", commonFeatureRouter);
 

@@ -51,7 +51,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-//Login Users
+// Login Users
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -83,10 +83,13 @@ const loginUser = async (req, res) => {
         expiresIn: "1h",
       }
     );
+
+    const isProduction = process.env.NODE_ENV === "production";
     return res
       .cookie("token", token, {
         httpOnly: true,
-        secure: false,
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
       })
       .json({
         success: true,
@@ -107,12 +110,19 @@ const loginUser = async (req, res) => {
   }
 };
 
-//Logout users
+// Logout users
 const logoutUser = (req, res) => {
-  return res.clearCookie("token").json({
-    success: true,
-    message: "Logged out successfully!",
-  });
+  const isProduction = process.env.NODE_ENV === "production";
+  return res
+    .clearCookie("token", {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+    })
+    .json({
+      success: true,
+      message: "Logged out successfully!",
+    });
 };
 
 const forgotPassword = async (req, res) => {
@@ -128,10 +138,12 @@ const forgotPassword = async (req, res) => {
   try {
     const user = await User.findOne({ email });
 
+    // Prevent account enumeration by returning a generic success message
     if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "No account found for this email.",
+      return res.status(200).json({
+        success: true,
+        message:
+          "If an account exists with this email, a reset link has been processed.",
       });
     }
 
@@ -147,11 +159,20 @@ const forgotPassword = async (req, res) => {
 
     const resetUrl = `${process.env.CLIENT_BASE_URL || "http://localhost:5173"}/auth/reset-password/${resetToken}`;
 
-    return res.status(200).json({
+    const responsePayload = {
       success: true,
-      message: "Password reset link generated successfully.",
-      resetUrl,
-    });
+      message:
+        "If an account exists with this email, a reset link has been processed.",
+    };
+
+    // Only expose resetUrl in development for testing without SMTP configured
+    if (process.env.NODE_ENV !== "production") {
+      responsePayload.resetUrl = resetUrl;
+      responsePayload.devNote =
+        "Visible in development only. Configure an email provider for production.";
+    }
+
+    return res.status(200).json(responsePayload);
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -173,7 +194,10 @@ const resetPassword = async (req, res) => {
   }
 
   try {
-    const resetTokenHash = crypto.createHash("sha256").update(token).digest("hex");
+    const resetTokenHash = crypto
+      .createHash("sha256")
+      .update(token)
+      .digest("hex");
 
     const user = await User.findOne({
       resetPasswordToken: resetTokenHash,
@@ -206,13 +230,19 @@ const resetPassword = async (req, res) => {
   }
 };
 
-//Auth-Middleware
+// Auth-Middleware: checks Cookie first, falls back to Authorization Bearer header
 const authMiddleware = async (req, res, next) => {
-  const token = req.cookies.token;
+  const authHeader = req.headers.authorization;
+  const headerToken =
+    authHeader && authHeader.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : null;
+  const token = req.cookies?.token || headerToken;
+
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: "Unauthorised user!",
+      message: "Unauthorized user! Token not provided.",
     });
   }
 
@@ -223,9 +253,28 @@ const authMiddleware = async (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: "Unauthorized user!",
+      message: "Unauthorized user! Invalid or expired token.",
     });
   }
 };
 
-export { registerUser, loginUser, logoutUser, authMiddleware, forgotPassword, resetPassword };
+// Admin role verification middleware
+const adminMiddleware = (req, res, next) => {
+  if (!req.user || req.user.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      message: "Access forbidden. Admin role required.",
+    });
+  }
+  next();
+};
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  authMiddleware,
+  adminMiddleware,
+  forgotPassword,
+  resetPassword,
+};

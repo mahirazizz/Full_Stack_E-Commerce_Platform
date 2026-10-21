@@ -6,32 +6,54 @@ import { Input } from "../ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice/index.js";
 import { setProductDetails } from "@/store/shop/products-slice/index.js";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "@/store/shop/wishlist-slice/index.js";
 import { Label } from "../ui/label";
 import StarRatingComponent from "../common/StarRating";
 import { useEffect, useState } from "react";
 import { addReview, getReviews } from "@/store/shop/review-slice/index.js";
 import { useToast } from "@/hooks/useToast.js";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
   const [reviewMsg, setReviewMsg] = useState("");
   const [rating, setRating] = useState(0);
   const [selectedImage, setSelectedImage] = useState("");
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
   const { reviews } = useSelector((state) => state.shopReview);
+  const { items: wishlistItems } = useSelector((state) => state.shopWishlist);
 
   const { toast } = useToast();
 
-  function handleRatingChange(getRating) {
-    console.log(getRating, "getRating");
+  const productId = productDetails?._id || productDetails?.id;
 
+  const isWishlisted = (wishlistItems || []).some(
+    (item) =>
+      item?.productId?._id?.toString() === productId?.toString() ||
+      item?.productId?.toString() === productId?.toString(),
+  );
+
+  function handleRatingChange(getRating) {
     setRating(getRating);
   }
 
   function handleAddToCart(getCurrentProductId, getTotalStock) {
-    let getCartItems = cartItems.items || [];
+    if (!isAuthenticated) {
+      toast({
+        title: "Please sign in to add products to your cart.",
+      });
+      setOpen(false);
+      navigate("/auth/login");
+      return;
+    }
+
+    let getCartItems = cartItems?.items || [];
 
     if (getCartItems.length) {
       const indexOfCurrentItem = getCartItems.findIndex(
@@ -65,6 +87,35 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
     });
   }
 
+  function handleToggleWishlist() {
+    if (!isAuthenticated) {
+      toast({
+        title: "Please sign in to save items to your wishlist.",
+      });
+      setOpen(false);
+      navigate("/auth/login");
+      return;
+    }
+
+    if (isWishlisted) {
+      dispatch(removeFromWishlist(productId)).then((res) => {
+        if (res?.payload?.success) {
+          toast({
+            title: "Removed from wishlist",
+          });
+        }
+      });
+    } else {
+      dispatch(addToWishlist(productId)).then((res) => {
+        if (res?.payload?.success) {
+          toast({
+            title: "Added to wishlist!",
+          });
+        }
+      });
+    }
+  }
+
   function handleDialogClose(nextOpen) {
     if (nextOpen) return;
 
@@ -76,6 +127,15 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
   }
 
   async function handleAddReview() {
+    if (!isAuthenticated) {
+      toast({
+        title: "Please sign in to submit a review.",
+      });
+      setOpen(false);
+      navigate("/auth/login");
+      return;
+    }
+
     if (rating === 0) {
       toast({
         title: "Please select a star rating before submitting.",
@@ -101,7 +161,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
         addReview({
           productId: productDetails?._id,
           userId: currentUserId,
-          userName: user?.userName,
+          userName: user?.username || user?.userName,
           reviewMessage: reviewMsg,
           reviewValue: rating,
         }),
@@ -118,7 +178,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
         title:
           typeof errorMessage === "string"
             ? errorMessage
-            : "Unable to add review. Make sure this product was purchased.",
+            : "Unable to add review. Make sure this product was purchased and paid for.",
         variant: "destructive",
       });
     }
@@ -127,8 +187,6 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
   useEffect(() => {
     if (productDetails !== null) dispatch(getReviews(productDetails?._id));
   }, [dispatch, productDetails]);
-
-  console.log(reviews, "reviews");
 
   const averageReview =
     reviews && reviews.length > 0
@@ -244,7 +302,9 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
           <div className="flex items-center justify-between rounded-2xl bg-sky-50 px-4 py-3">
             <p
               className={`text-3xl font-black tracking-tight text-slate-950 ${
-                productDetails?.salePrice > 0 ? "line-through" : ""
+                productDetails?.salePrice > 0
+                  ? "line-through text-slate-400"
+                  : ""
               }`}
             >
               ${productDetails?.price}
@@ -263,14 +323,14 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
               ({averageReview.toFixed(2)})
             </span>
           </div>
-          <div className="pt-1">
+          <div className="flex gap-3 pt-1">
             {productDetails?.totalStock === 0 ? (
-              <Button className="w-full cursor-not-allowed rounded-2xl bg-slate-200 text-slate-500 opacity-100 hover:bg-slate-200">
+              <Button className="flex-1 cursor-not-allowed rounded-2xl bg-slate-200 text-slate-500 opacity-100 hover:bg-slate-200">
                 Out of Stock
               </Button>
             ) : (
               <Button
-                className="w-full rounded-2xl bg-sky-600 text-white shadow-lg shadow-sky-600/20 hover:bg-sky-500"
+                className="flex-1 rounded-2xl bg-sky-600 text-white shadow-lg shadow-sky-600/20 hover:bg-sky-500"
                 onClick={() =>
                   handleAddToCart(
                     productDetails?._id,
@@ -281,6 +341,20 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
                 Add to Cart
               </Button>
             )}
+            <Button
+              variant="outline"
+              onClick={handleToggleWishlist}
+              className="rounded-2xl border-slate-200 hover:bg-rose-50 hover:border-rose-200 px-4"
+              title={isWishlisted ? "Remove from Wishlist" : "Save to Wishlist"}
+            >
+              <Heart
+                className={`h-5 w-5 ${
+                  isWishlisted
+                    ? "fill-rose-500 text-rose-500"
+                    : "text-slate-600"
+                }`}
+              />
+            </Button>
           </div>
           <Separator className="bg-slate-100" />
           <div className="min-h-[180px] max-h-[34vh] overflow-y-auto pr-1">
@@ -296,7 +370,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
                   >
                     <Avatar className="h-10 w-10 border border-sky-100 bg-sky-50">
                       <AvatarFallback className="bg-sky-600 text-white">
-                        {reviewItem?.userName[0].toUpperCase()}
+                        {reviewItem?.userName?.[0]?.toUpperCase() || "U"}
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid gap-1">

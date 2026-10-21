@@ -11,9 +11,7 @@ import {
 import { sortOptions } from "@/config";
 import { useToast } from "@/hooks/useToast.js";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice/index.js";
-import {
-  fetchAllFilteredProducts,
-} from "@/store/shop/products-slice/index.js";
+import { fetchAllFilteredProducts } from "@/store/shop/products-slice/index.js";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,17 +28,14 @@ function createSearchParamsHelper(filterParams) {
     }
   }
 
-  console.log(queryParams, "queryParams");
-
   return queryParams.join("&");
 }
 
 function ShoppingListing() {
   const dispatch = useDispatch();
   const { productList } = useSelector((state) => state.shopProducts);
-  console.log(productList, "PrductList in listing");
   const { cartItems } = useSelector((state) => state.shopCart);
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
@@ -70,19 +65,24 @@ function ShoppingListing() {
         cpyFilters[getSectionId].push(getCurrentOption);
       else cpyFilters[getSectionId].splice(indexOfCurrentOption, 1);
     }
-
     setFilters(cpyFilters);
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
   }
 
   function handleGetProductDetails(getCurrentProductId) {
-    if (!getCurrentProductId) return;
     navigate(`/shop/product/${getCurrentProductId}`);
   }
 
   function handleAddtoCart(getCurrentProductId, getTotalStock) {
-    console.log(cartItems);
-    let getCartItems = cartItems.items || [];
+    if (!isAuthenticated) {
+      toast({
+        title: "Please sign in to add products to your cart.",
+      });
+      navigate("/auth/login");
+      return;
+    }
+
+    let getCartItems = cartItems?.items || [];
 
     if (getCartItems.length) {
       const indexOfCurrentItem = getCartItems.findIndex(
@@ -136,8 +136,6 @@ function ShoppingListing() {
       );
   }, [dispatch, sort, filters]);
 
-  console.log(productList, "productListproductListproductList");
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter filters={filters} handleFilter={handleFilter} />
@@ -178,7 +176,7 @@ function ShoppingListing() {
           {productList && productList.length > 0
             ? productList.map((productItem) => (
                 <ShoppingProductTile
-                  key={productItem?._id || productItem?.id}
+                  key={productItem._id || productItem.id}
                   handleGetProductDetails={handleGetProductDetails}
                   product={productItem}
                   handleAddtoCart={handleAddtoCart}

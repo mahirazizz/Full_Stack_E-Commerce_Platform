@@ -1,5 +1,8 @@
 import ProductDetailsDialog from "@/components/shopping-view/ShopProductDetails";
-import { fetchProductDetails, setProductDetails } from "@/store/shop/products-slice/index.js";
+import {
+  fetchProductDetails,
+  setProductDetails,
+} from "@/store/shop/products-slice/index.js";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -21,7 +24,11 @@ function ShoppingProductDetailsPage() {
   }, [dispatch, productId]);
 
   function handleCloseDialog() {
-    navigate("/shop/listing");
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/shop/listing");
+    }
   }
 
   return (

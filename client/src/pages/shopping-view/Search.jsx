@@ -16,11 +16,10 @@ function SearchProducts() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { searchResults } = useSelector((state) => state.shopSearch);
-
-  const { user } = useSelector((state) => state.auth);
-
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
   const { toast } = useToast();
+
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       if (keyword && keyword.trim() !== "" && keyword.trim().length > 3) {
@@ -36,8 +35,15 @@ function SearchProducts() {
   }, [keyword, dispatch, setSearchParams]);
 
   function handleAddtoCart(getCurrentProductId, getTotalStock) {
-    console.log(cartItems);
-    let getCartItems = cartItems.items || [];
+    if (!isAuthenticated) {
+      toast({
+        title: "Please sign in to add products to your cart.",
+      });
+      navigate("/auth/login");
+      return;
+    }
+
+    let getCartItems = cartItems?.items || [];
 
     if (getCartItems.length) {
       const indexOfCurrentItem = getCartItems.findIndex(
@@ -75,8 +81,6 @@ function SearchProducts() {
   function handleGetProductDetails(getCurrentProductId) {
     navigate(`/shop/product/${getCurrentProductId}`);
   }
-
-  console.log(searchResults, "searchResults");
 
   return (
     <div className="container mx-auto px-4 py-8 md:px-6">

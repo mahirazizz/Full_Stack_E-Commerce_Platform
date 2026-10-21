@@ -1,10 +1,20 @@
+import { Heart } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
 import { brandOptionsMap, categoryOptionsMap } from "@/config";
 import { Badge } from "../ui/badge";
-import { Link } from "react-router-dom";
+import { useToast } from "@/hooks/useToast";
+import { addToWishlist, removeFromWishlist } from "@/store/shop/wishlist-slice";
 
 function ShoppingProductTile({ product, handleAddtoCart }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { items: wishlistItems } = useSelector((state) => state.shopWishlist);
+
   const productId = product?._id || product?.id;
   const productRoute = productId ? `/shop/product/${productId}` : "#";
 
@@ -14,8 +24,61 @@ function ShoppingProductTile({ product, handleAddtoCart }) {
       ? [product.image]
       : [];
 
+  const isWishlisted = (wishlistItems || []).some(
+    (item) =>
+      item?.productId?._id?.toString() === productId?.toString() ||
+      item?.productId?.toString() === productId?.toString(),
+  );
+
+  const handleToggleWishlist = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      toast({
+        title: "Please sign in to save items to your wishlist.",
+      });
+      navigate("/auth/login");
+      return;
+    }
+
+    if (isWishlisted) {
+      dispatch(removeFromWishlist(productId)).then((res) => {
+        if (res?.payload?.success) {
+          toast({
+            title: "Removed from wishlist",
+          });
+        }
+      });
+    } else {
+      dispatch(addToWishlist(productId)).then((res) => {
+        if (res?.payload?.success) {
+          toast({
+            title: "Added to wishlist!",
+          });
+        }
+      });
+    }
+  };
+
   return (
-    <Card className="group w-full max-w-sm overflow-hidden rounded-[1.5rem] border-slate-200/80 bg-white shadow-[0_12px_36px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(15,23,42,0.1)]">
+    <Card className="group relative w-full max-w-sm overflow-hidden rounded-[1.5rem] border-slate-200/80 bg-white shadow-[0_12px_36px_rgba(15,23,42,0.06)] transition-all hover:-translate-y-1 hover:shadow-[0_18px_50px_rgba(15,23,42,0.1)]">
+      {/* Wishlist Floating Button */}
+      <button
+        type="button"
+        onClick={handleToggleWishlist}
+        className="absolute right-3 top-3 z-20 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 backdrop-blur shadow-md transition hover:scale-110 hover:bg-white"
+        title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+      >
+        <Heart
+          className={`h-5 w-5 transition ${
+            isWishlisted
+              ? "fill-rose-500 text-rose-500"
+              : "text-slate-600 hover:text-rose-500"
+          }`}
+        />
+      </button>
+
       <Link to={productRoute} className="block cursor-pointer">
         <div className="relative overflow-hidden">
           <img

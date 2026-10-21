@@ -7,7 +7,10 @@ const addProductReview = async (req, res) => {
     const { productId, userId, userName, reviewMessage, reviewValue } =
       req.body;
 
-    if (!productId || !userId) {
+    const targetUserId = req.user?.id || userId;
+    const targetUserName = req.user?.username || userName || "User";
+
+    if (!productId || !targetUserId) {
       return res.status(400).json({
         success: false,
         message: "Product and user information is required.",
@@ -28,7 +31,11 @@ const addProductReview = async (req, res) => {
       });
     }
 
-    const userOrders = await Order.find({ userId }).select("cartItems");
+    // Only allow verified purchasers with paid orders to leave reviews
+    const userOrders = await Order.find({
+      userId: targetUserId,
+      paymentStatus: "paid",
+    }).select("cartItems");
 
     const hasPurchasedProduct = userOrders.some((orderItem) =>
       (orderItem?.cartItems || []).some(
@@ -39,26 +46,26 @@ const addProductReview = async (req, res) => {
     if (!hasPurchasedProduct) {
       return res.status(403).json({
         success: false,
-        message: "You need to purchase product to review it.",
+        message: "You need to purchase this product to leave a review.",
       });
     }
 
     const checkExistingReview = await Review.findOne({
       productId,
-      userId,
+      userId: targetUserId,
     });
 
     if (checkExistingReview) {
       return res.status(400).json({
         success: false,
-        message: "You already reviewed this product!",
+        message: "You have already reviewed this product!",
       });
     }
 
     const newReview = new Review({
       productId,
-      userId,
-      userName: userName || "User",
+      userId: targetUserId,
+      userName: targetUserName,
       reviewMessage: reviewMessage?.trim() || "",
       reviewValue: normalizedReviewValue,
     });
@@ -81,7 +88,7 @@ const addProductReview = async (req, res) => {
     console.log(e);
     res.status(500).json({
       success: false,
-      message: "Error occur while adding reviews!",
+      message: "Error occurred while adding review!",
     });
   }
 };
@@ -90,7 +97,7 @@ const getProductReviews = async (req, res) => {
   try {
     const { productId } = req.params;
 
-    const reviews = await Review.find({ productId });
+    const reviews = await Review.find({ productId }).sort({ createdAt: -1 });
     res.status(200).json({
       success: true,
       data: reviews,
@@ -99,7 +106,7 @@ const getProductReviews = async (req, res) => {
     console.log(error);
     res.status(500).json({
       success: false,
-      message: "Error occur while get product review!",
+      message: "Error occurred while retrieving reviews",
     });
   }
 };

@@ -1,4 +1,12 @@
-import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
+import {
+  Heart,
+  HousePlug,
+  LogIn,
+  LogOut,
+  Menu,
+  ShoppingCart,
+  UserCog,
+} from "lucide-react";
 import {
   Link,
   useLocation,
@@ -22,6 +30,7 @@ import { logoutUser } from "@/store/auth-slice/index.js";
 import UserCartWrapper from "./ShopCartWrapper";
 import { useEffect, useState } from "react";
 import { fetchCartItems } from "@/store/shop/cart-slice/index.js";
+import { fetchWishlist } from "@/store/shop/wishlist-slice/index.js";
 import { Label } from "../ui/label";
 
 function MenuItems() {
@@ -69,8 +78,9 @@ function MenuItems() {
 }
 
 function HeaderRightContent() {
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
+  const { items: wishlistItems } = useSelector((state) => state.shopWishlist);
   const [openCartSheet, setOpenCartSheet] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -80,21 +90,53 @@ function HeaderRightContent() {
   }
 
   useEffect(() => {
-    if (user?.id) {
+    if (isAuthenticated && user?.id) {
       dispatch(fetchCartItems(user?.id));
+      dispatch(fetchWishlist());
     }
-  }, [dispatch, user?.id]);
+  }, [dispatch, isAuthenticated, user?.id]);
 
   return (
-    <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+    <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+      {/* Wishlist Icon Button */}
+      <Button
+        onClick={() => {
+          if (!isAuthenticated) {
+            navigate("/auth/login");
+          } else {
+            navigate("/shop/wishlist");
+          }
+        }}
+        variant="outline"
+        size="icon"
+        className="relative h-11 w-11 rounded-full border-sky-200 bg-sky-50 text-sky-800 hover:bg-sky-100"
+        title="View Wishlist"
+      >
+        <Heart className="w-5 h-5 text-rose-500" />
+        {isAuthenticated && wishlistItems?.length > 0 && (
+          <span className="absolute right-0 top-0 flex h-5 min-w-5 items-center justify-center rounded-full bg-rose-500 px-1 text-[11px] font-bold text-white">
+            {wishlistItems.length}
+          </span>
+        )}
+        <span className="sr-only">User wishlist</span>
+      </Button>
+
+      {/* Cart Sheet Button */}
       <Sheet open={openCartSheet} onOpenChange={setOpenCartSheet}>
         <Button
-          onClick={() => setOpenCartSheet(true)}
+          onClick={() => {
+            if (!isAuthenticated) {
+              navigate("/auth/login");
+            } else {
+              setOpenCartSheet(true);
+            }
+          }}
           variant="outline"
           size="icon"
           className="relative h-11 w-11 rounded-full border-sky-200 bg-sky-50 text-sky-800 hover:bg-sky-100"
+          title="View Cart"
         >
-          <ShoppingCart className="w-6 h-6" />
+          <ShoppingCart className="w-5 h-5" />
           <span className="absolute right-0 top-0 flex h-5 min-w-5 items-center justify-center rounded-full bg-sky-600 px-1 text-[11px] font-bold text-white">
             {cartItems?.items?.length || 0}
           </span>
@@ -110,31 +152,46 @@ function HeaderRightContent() {
         />
       </Sheet>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Avatar className="ring-2 ring-sky-100">
-            <AvatarFallback className="bg-sky-600 text-white font-extrabold">
-              {user?.username[0].toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          side="right"
-          className="w-56 rounded-2xl border-slate-200 p-2 shadow-xl"
+      {/* User Avatar / Login Button */}
+      {isAuthenticated && user ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Avatar className="cursor-pointer ring-2 ring-sky-100">
+              <AvatarFallback className="bg-sky-600 text-white font-extrabold">
+                {user?.username?.[0]?.toUpperCase() || "U"}
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            side="right"
+            className="w-56 rounded-2xl border-slate-200 p-2 shadow-xl"
+          >
+            <DropdownMenuLabel>Logged in as {user?.username}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => navigate("/shop/account")}>
+              <UserCog className="mr-2 h-4 w-4" />
+              Account
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => navigate("/shop/wishlist")}>
+              <Heart className="mr-2 h-4 w-4 text-rose-500" />
+              My Wishlist ({wishlistItems?.length || 0})
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <Button
+          onClick={() => navigate("/auth/login")}
+          className="rounded-full bg-sky-600 hover:bg-sky-700 text-white font-semibold flex items-center gap-2 px-5 py-2"
         >
-          <DropdownMenuLabel>Logged in as {user?.username}</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => navigate("/shop/account")}>
-            <UserCog className="mr-2 h-4 w-4" />
-            Account
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout}>
-            <LogOut className="mr-2 h-4 w-4" />
-            Logout
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <LogIn className="h-4 w-4" />
+          Sign In
+        </Button>
+      )}
     </div>
   );
 }
